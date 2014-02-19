@@ -76,6 +76,35 @@ class XMLService {
         newTool.save(flush: false)
     }
 
+    static void createBooks(Node xmlFile){
+        Node books = (Node) ((Node) ((Node) xmlFile.children()[1]).children()[2]).children()[0]
+        System.out.print("books: " + books)
+        List<Object> bookChildren = books.children()
+        System.out.print("booksChildren " + bookChildren)
+
+        for (int i = 0; i < bookChildren.size(); ++i){
+            List<Object> listaBook = ((Node) bookChildren[i]).children()
+            System.out.print("book: " + listaBook)
+            Node dadosBasicos = (Node) listaBook[0]
+            Node detalhamentoLivro = (Node) listaBook[1]
+            createNewBook(dadosBasicos,detalhamentoLivro, i)
+        }
+    }
+
+    private static void createNewBook (Node dadosBasicos, Node detalhamentoLivro, int i) {
+        Book newBook = new Book()
+        newBook.title = getAttributeValueFromNode(dadosBasicos, "TITULO-DO-LIVRO")
+        newBook.publisher = getAttributeValueFromNode(detalhamentoLivro, "NOME-DA-EDITORA")
+
+        if(Publication.findByTitle(newBook.title) == null) {
+            fillPublicationDate(newBook, dadosBasicos, "ANO")
+            newBook.file = 'emptyfile' + i.toString()
+            newBook.pages = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-PAGINAS")
+            newBook.volume = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-VOLUMES")
+            newBook.save(flush: false)
+        }
+    }
+
     static void createBooksChapters(Node xmlFile){
         Node bookChapters = (Node) ((Node) ((Node) xmlFile.children()[1]).children()[2]).children()[1]
         List<Object> bookChaptersChildren = bookChapters.children()
