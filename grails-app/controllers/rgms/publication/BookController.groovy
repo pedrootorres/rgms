@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class BookController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+    AuxiliarController aux = new AuxiliarController()
 
     def index() {
         redirect(action: "list", params: params)
@@ -87,20 +88,6 @@ class BookController {
 
     def delete(Long id) {
         def bookInstance = Book.get(id)
-        if (!bookInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'book.label', default: 'Book'), id])
-            redirect(action: "list")
-            return
-        }
-
-        try {
-            bookInstance.delete(flush: true)
-            flash.message = message(code: 'default.deleted.message', args: [message(code: 'book.label', default: 'Book'), id])
-            redirect(action: "list")
-        }
-        catch (DataIntegrityViolationException e) {
-            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'book.label', default: 'Book'), id])
-            redirect(action: "show", id: id)
-        }
+        aux.delete(id, bookInstance, 'book.label', 'Book');
     }
 }
