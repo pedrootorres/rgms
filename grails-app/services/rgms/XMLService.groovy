@@ -78,15 +78,12 @@ class XMLService {
 
     static void createBooks(Node xmlFile){
         Node books = (Node) ((Node) ((Node) xmlFile.children()[1]).children()[2]).children()[0]
-        System.out.print("books: " + books)
         List<Object> bookChildren = books.children()
-        System.out.print("booksChildren " + bookChildren)
 
         for (int i = 0; i < bookChildren.size(); ++i){
-            List<Object> listaBook = ((Node) bookChildren[i]).children()
-            System.out.print("book: " + listaBook)
-            Node dadosBasicos = (Node) listaBook[0]
-            Node detalhamentoLivro = (Node) listaBook[1]
+            List<Object> book = ((Node) bookChildren[i]).children()
+            Node dadosBasicos = (Node) book[0]
+            Node detalhamentoLivro = (Node) book[1]
             createNewBook(dadosBasicos,detalhamentoLivro, i)
         }
     }
@@ -98,9 +95,10 @@ class XMLService {
 
         if(Publication.findByTitle(newBook.title) == null) {
             fillPublicationDate(newBook, dadosBasicos, "ANO")
+
             newBook.file = 'emptyfile' + i.toString()
             newBook.pages = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-PAGINAS")
-            newBook.volume = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-VOLUMES")
+            newBook.volume = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-VOLUMES").toInteger()
             newBook.save(flush: false)
         }
     }
