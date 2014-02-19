@@ -1,4 +1,6 @@
+<%@ page import="rgms.member.Member" %>
 <%@ page import="rgms.publication.Book" %>
+<%@ page import="rgms.publication.PublicationController" %>
 
 
 
@@ -21,9 +23,9 @@
 <div class="fieldcontain ${hasErrors(bean: bookInstance, field: 'file', 'error')} ">
 	<label for="file">
 		<g:message code="book.file.label" default="File" />
-		
 	</label>
-	<g:textArea name="file" cols="40" rows="5" maxlength="100000" value="${bookInstance?.file}"/>
+    <g:field type="file" name="file" id="file" required=""
+             value="${fieldValue(bean: bookInstance, field: 'file')}"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: bookInstance, field: 'researchLine', 'error')} ">
@@ -61,8 +63,12 @@
 <div class="fieldcontain ${hasErrors(bean: bookInstance, field: 'members', 'error')} ">
 	<label for="members">
 		<g:message code="book.members.label" default="Members" />
-		
 	</label>
+
+    <!-- #if( $contextualInformation ) -->
+    <g:select name="members" from="${PublicationController.membersOrderByUsually()}" size="10" multiple="yes" optionKey="id" value="${bookInstance?.members.id}"/>
+    <!-- #else <g:select name="members" from="${Member.list()}" size="10" multiple="yes" optionKey="id" value="${bookInstance?.members.id}"/> -->
+    <!-- #end -->
 	
 </div>
 

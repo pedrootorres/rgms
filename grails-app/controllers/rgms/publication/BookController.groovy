@@ -16,7 +16,11 @@ class BookController {
     }
 
     def create() {
-        [bookInstance: new Book(params)]
+        def bookInstance = new Book(params)
+        //#if($contextualInformation)
+        PublicationController.addAuthor(bookInstance)
+        //#end
+        [bookInstance: bookInstance]
     }
 
     def save() {
