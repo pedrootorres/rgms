@@ -107,6 +107,7 @@ class XMLService {
 
         if(Publication.findByTitle(newBook.title) == null) {
             fillPublicationDate(newBook, dadosBasicos, "ANO")
+
             newBook.file = 'emptyfile' + i.toString()
             newBook.pages = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-PAGINAS")
             newBook.volume = getAttributeValueFromNode(detalhamentoLivro, "NUMERO-DE-VOLUMES").toInteger()
